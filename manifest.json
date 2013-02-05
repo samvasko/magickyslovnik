@@ -1,0 +1,24 @@
+{
+  "name": "My Extension",
+  "version": "2.1",
+  "manifest_version": 2,
+  "description": "Gets information from Google.",
+  "permissions":
+  [
+    "tabs",
+    "bookmarks",
+    "history",
+    "clipboardRead",
+    "<all_urls>"
+  ],
+  "content_scripts":
+  [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["jquery.js","runner.js"],
+      "css": ["magician.css"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}
