@@ -1,4 +1,4 @@
 magickyslovnik
 ===================
-blah
+yep
 power of universe to translate
