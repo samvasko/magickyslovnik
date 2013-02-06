@@ -8,6 +8,7 @@ $(function() {
 
 	function showMagic() {
 		console.log( "hej!" );
-		$(document.body).prepend('<input id="slovnikvloz" type="text" name="slovnikuj" >');
+		var body = $('<div/>', { "id": magician});
+		$('<input/>', {name: "searchmagic", })
 	}
 }());
