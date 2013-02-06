@@ -40,14 +40,18 @@
 	position: absolute;
 	background-color: white;
 	margin-top: 0;
-	padding: 20px;
 	font-size: 14px;
 	list-style: none;
+	box-shadow: 0 10px 20px #ccc
 }
 
 #magician li {
 	padding:2px 0;
+	margin: 0 20px;
 }
+
+#magician li:first-child { margin-top: 20px;}
+#magician li:last-child { margin-bottom: 20px;}
 
 #magician b {
 	padding-right: 10px;
