@@ -56,15 +56,11 @@ var showMagic = {
 			$('table.p', data).each(function() {
 				var	from = $(this).find('.z a').text(),
 					to = [];
+
 				$(this).find('.do a:not(.lupa) span').each(function() {
 					to.push($(this).text());
 				});
-
-				words.push({
-					from:from,
-					to:to
-				});
-
+				words.push({ from:from, to:to });
 			});
 
 			this.words = words;
@@ -72,6 +68,23 @@ var showMagic = {
 
 		}.bind(this));
 		return true;
+	},
+
+	render : function() {
+		if (!this.words) console.error('missing words');
+
+		var list = $('<ul/>');
+
+		for(var word in this.words ) {
+			var current = this.words[word];
+
+			$('<li/>').text( current.to.join(' | ') )
+						.prepend($('<b/>').text(current.from))
+						.appendTo(list);
+		}
+
+		console.log(list);
+
 	}
 
 };
