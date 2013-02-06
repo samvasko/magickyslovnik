@@ -54,14 +54,17 @@ var showMagic = {
 	fetch : function(elem) {
 		var currentVal = this.inputField.val();
 		// value of input is the same, do not care || to short to get something
+		if ( currentVal.length < 2 ) this.list.html('');
 		if ( currentVal == this.lastVal ||  currentVal.length < 2 ) return true;
 		this.lastVal = currentVal;
 
-		console.log( this.inputField.val() );
-
 		jQuery.get(this.url + this.from + '-' + this.to, {q: currentVal }, function(data, textStatus) {
-			var words = [];
-			$('table.p', data).each(function() {
+			var words = [],
+				rawWords = $('table.p', data);
+
+			console.log(rawWords.length);
+			if (!rawWords.length) this.list.html('Ziadne vysledky');
+			rawWords.each(function() {
 				var	from = $(this).find('.z a').text(),
 					to = [];
 
