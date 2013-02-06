@@ -18,12 +18,16 @@ var showMagic = {
 	to : 'slovensky',
 	url : 'http://slovnik.azet.sk/preklad/',
 	words : [],
+	list : {},
 
 	init : function() {
 
 		// Create elements!
-		this.inputField = $('<input/>', {name: 'searchmagic'}).appendTo(this.element);
-		console.log( 'Initialized dictionary!' );
+		this.inputField = $('<input />', {
+			'name': 'searchmagic',
+			'type': 'text',
+			'id': 'searchmagic'}).appendTo(this.element);
+		this.list = this.element.append($('<ul/>'));
 
 		// bind keys
 		$(document).keydown(function(event){
@@ -38,7 +42,11 @@ var showMagic = {
 	},
 
 	open : function() {
-		this.element = $(document.body).prepend(this.element);
+		$(document.body).prepend(this.element);
+		this.element = $('#magician');
+		this.list = this.element.find('ul');
+
+		this.inputField.focus();
 		this.first = false;
 		this.visible = true;
 	},
@@ -72,18 +80,16 @@ var showMagic = {
 
 	render : function() {
 		if (!this.words) console.error('missing words');
-
-		var list = $('<ul/>');
-
+		this.list.html('');
 		for(var word in this.words ) {
 			var current = this.words[word];
 
 			$('<li/>').text( current.to.join(' | ') )
 						.prepend($('<b/>').text(current.from))
-						.appendTo(list);
+						.appendTo(this.list);
 		}
 
-		console.log(list);
+		this.list.appendTo(this.element);
 
 	}
 

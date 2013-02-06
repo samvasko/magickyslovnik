@@ -1,16 +1,49 @@
-#slovnikvloz {
+#magician {
+	box-sizing: border-box;
 	position: fixed;
-	top: 33%;
+	top: 13%;
 	display: block;
-	width: 33%;
+	width: 42%;
 	margin: 0 auto;
-	left: 33%;
-	background: #fafafa;
+	left: 28%;
+	box-shadow: 0 30px 150px 29px #ccc;
 	z-index: 100;
-	background: red;
-	box-shadow: 0 0 30px #Ccc;
-	border: 1px solid rosybrown;
-	padding: 5px;
-	height: 50px;
-	font-size: 20px
+}
+
+#magician * {
+	box-sizing: border-box;
+}
+
+#magician input {
+	display: block;
+	padding: 5px 15px;
+	width: 100%;
+	height: 60px;
+	border: 1px solid silver;
+	box-shadow: inset 2px 0 0 cornflowerblue;
+	border-left-color:cornflowerblue;
+	font-weight: 200;
+	font-size: 22px;
+	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
+}
+#magician input:focus {
+	outline: 0;
+}
+
+#magician ul {
+	z-index: 100;
+	position: absolute;
+	background-color: white;
+	margin-top: 0;
+	padding: 20px;
+	font-size: 14px;
+	list-style: none;
+}
+
+#magician li {
+	padding:2px 0;
+}
+
+#magician b {
+	padding-right: 10px;
 }
