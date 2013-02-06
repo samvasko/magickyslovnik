@@ -6,6 +6,7 @@
 	margin: 0 auto;
 	left: 33%;
 	z-index: 100;
+	background: red;
 	box-shadow: 0 0 30px #Ccc;
 	border: 1px solid rosybrown;
 	padding: 5px;
