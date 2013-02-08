@@ -9,9 +9,13 @@ $(function() {
 var showMagic = {
 
 	letterKey : 83, // S
-	element : {}, inputField : {}, list : {}, lang : {},
+	element : {}, inputField : {}, listUl : {}, langUl : {},
 	lastVal : '',
-	from : 'anglicko', to : 'slovensky',
+	languages : {
+		ensk : { from : 'anglicko', to : 'slovensky' },
+		sken : { from : 'slovensko', to : 'anglicky' }
+	},
+	currentLang: 'sken', // default direction
 	url : 'http://slovnik.azet.sk/preklad/',
 	words : [],
 
@@ -23,12 +27,12 @@ var showMagic = {
 			'name': 'searchmagic',
 			'type': 'text',
 			'id': 'searchmagic'}).appendTo(this.element);
-		this.element.append( $('<ul/>', {'id': 'results' }) );
-		this.element.append( $('<ul/>', {'id':'lang'}) );
+
+		this.langUl = $('<ul/>', {'id':'lang'}).appendTo(this.element);
+		this.listUl = $('<ul/>', {'id':'results'}).appendTo(this.element);
 
 		// insert them into body
 		this.element = this.element.appendTo($(document.body));
-		this.list = this.element.find('#results');
 
 		// bind keys
 		$(document).keydown( this.open_key.bind(this) );
@@ -44,16 +48,24 @@ var showMagic = {
 
 	fetch : function(elem) {
 		var currentVal = this.inputField.val();
-		// value of input is the same, do not care || to short to get something
-		if ( currentVal.length < 2 ) this.list.html('');
-		if ( currentVal == this.lastVal ||  currentVal.length < 2 ) return true;
-		this.lastVal = currentVal;
 
-		jQuery.get(this.url + this.from + '-' + this.to, {q: currentVal }, function(data, textStatus) {
+		if ( currentVal.length < 2 ) {
+			this.list.html('');
+			return false;
+		}
+		if ( currentVal == this.lastVal)
+		{
+			return true;
+		}
+
+		this.lastVal = currentVal;
+		var fromto = this.languages[this.currentLang];
+
+		jQuery.get(this.url + fromto.from + '-' + fromto.to, {q: currentVal }, function(data, textStatus) {
 			var words = [],
 				rawWords = $('table.p', data);
 
-			if (!rawWords.length) this.list.html('Ziadne vysledky');
+			// is this a bug or feature?
 			rawWords.each(function() {
 				var	from = $(this).find('.z a').text(),
 					to = [];
@@ -63,33 +75,27 @@ var showMagic = {
 				});
 				words.push({ from:from, to:to });
 			});
-
 			this.words = words;
 			this.render();
-
 		}.bind(this));
 		return true;
 	},
 
 	render : function() {
 		if (!this.words) console.error('missing words');
-		this.list.html('');
+		this.listUl.html('');
 		for(var word in this.words ) {
 			var current = this.words[word];
-
 			$('<li/>').text( current.to.join(' | ') )
 						.prepend($('<b/>').text(current.from))
-						.appendTo(this.list);
+						.appendTo(this.listUl);
 		}
-
-		this.list.appendTo(this.element);
+		this.listUl.appendTo(this.element);
 	},
 	open_key : function (event) {
 		if (event.keyCode == 83 && event.altKey) {
-
 			event.preventDefault();
 			event.stopPropagation();
-
 			this.opencloser();
 			return false;
 		}
@@ -98,9 +104,7 @@ var showMagic = {
 		if (event.keyCode == 27 && !this.element.hasClass('disabled')) {
 			event.preventDefault();
 			event.stopPropagation();
-
 			this.element.toggleClass('disabled');
-
 			return false;
 		}
 	}
