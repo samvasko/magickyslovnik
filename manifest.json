@@ -5,7 +5,6 @@
   "description": "Gets information from Google.",
   "permissions":
   [
-    "clipboardRead",
     "<all_urls>"
   ],
   "content_scripts":
@@ -14,8 +13,7 @@
       "matches": ["<all_urls>"],
       "js": ["jquery.js","runner.js"],
       "css": ["magician.css"],
-      "run_at": "document_end",
-      "all_frames": true
+      "run_at": "document_end"
     }
   ]
 }
