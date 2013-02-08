@@ -9,16 +9,15 @@ $(function() {
 var showMagic = {
 
 	letterKey : 83, // S
-	element : $('<div/>', { 'id': 'magician' }),
+	element : $('<div/>', { 'id': 'magician', 'class': 'disabled' }),
 	inputField : {},
-	first : true,
-	visible : false,
 	lastVal : '',
 	from : 'anglicko',
 	to : 'slovensky',
 	url : 'http://slovnik.azet.sk/preklad/',
 	words : [],
 	list : {},
+	lang : {},
 
 	init : function() {
 
@@ -27,13 +26,18 @@ var showMagic = {
 			'name': 'searchmagic',
 			'type': 'text',
 			'id': 'searchmagic'}).appendTo(this.element);
-		this.list = this.element.append($('<ul/>'));
+		this.list = this.element.append( $('<ul/>', {'id': 'results' }) );
+		this.languages = this.element.append( $('<ul/>', {'id':'lang'}) );
 
 		// bind keys
 		$(document).keydown(function(event){
+			console.log(event.keyCode);
 			if (event.keyCode == 83 && event.altKey) {
 				this.open();
 				return false;
+			}
+			if (event.keyCode == 27) {
+				this.element.toggleClass('disabled');
 			}
 		}.bind(this));
 
@@ -42,13 +46,13 @@ var showMagic = {
 	},
 
 	open : function() {
-		$(document.body).prepend(this.element);
-		this.element = $('#magician');
-		this.list = this.element.find('ul');
-
+		this.element.toggleClass('disabled');
+		if ( ! this.element.hasClass('disabled') ) {
+			$(document.body).prepend(this.element);
+			this.element = $('#magician');
+			this.list = this.element.find('ul');
+		}
 		this.inputField.focus();
-		this.first = false;
-		this.visible = true;
 	},
 
 	fetch : function(elem) {
@@ -94,8 +98,7 @@ var showMagic = {
 
 		this.list.appendTo(this.element);
 
-	}
-
+	},
 };
 
 showMagic.init();
