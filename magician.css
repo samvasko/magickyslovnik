@@ -1,17 +1,17 @@
 #magician, #magician ul, #magician input, #magician li {
-	box-sizing: border-box;
 	z-index: 999;
 	display: inherit;
+	box-sizing: border-box;
 	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
 }
 
 #magician {
-	height: 60px;
 	position: fixed;
 	top: 13%;
 	left: 28%;
 	margin: 0 auto;
 	width: 42%;
+	height: 60px;
 	box-shadow: 0 30px 150px 29px #ccc;
 }
 
@@ -21,6 +21,7 @@
 }
 
 #magician input {
+	margin: 0;
 	position: relative;
 	display: block;
 	padding: 5px 15px;
@@ -37,12 +38,13 @@
 #magician input:focus {
 	outline: 0;
 }
-#magician #lamg {
+#magician #lang {
 	position: absolute;
-	left: 0;
 	top: 0;
-	height: 10px;
-	width: 10px;
+	right: 0;
+	width: 100px;
+	line-height: 54px;
+	height: 60px;
 }
 
 #magician #results {
