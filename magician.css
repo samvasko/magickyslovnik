@@ -1,11 +1,11 @@
-#magician, #magician ul, #magician input, #magician li {
+#trans_magician, #trans_magician ul, #trans_magician input, #trans_magician li {
 	z-index: 999;
 	display: inherit;
 	box-sizing: border-box;
 	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
 }
 
-#magician {
+#trans_magician {
 	position: fixed;
 	top: 13%;
 	left: 28%;
@@ -15,12 +15,12 @@
 	box-shadow: 0 30px 150px 29px #ccc;
 }
 
-#magician.disabled {
+#trans_magician.trans_disabled {
 	display: none !important;
 	overflow: hidden !important;
 }
 
-#magician input {
+#trans_magician input {
 	margin: 0;
 	position: relative;
 	display: block;
@@ -35,10 +35,10 @@
 	font-weight: 200;
 	font-size: 22px;
 }
-#magician input:focus {
+#trans_magician input:focus {
 	outline: 0;
 }
-#magician #lang {
+#trans_magician_lang {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -47,7 +47,7 @@
 	height: 60px;
 }
 
-#magician #results {
+#trans_magician_results {
 	position: absolute;
 	margin-top: 0;
 	margin-left: 5%;
@@ -58,14 +58,14 @@
 	font-size: 14px;
 }
 
-#magician #results li {
+#trans_magician_results li {
 	margin: 0 20px;
 	padding:2px 0;
 }
 
-#magician #results li:first-child { margin-top: 20px;}
-#magician #results li:last-child { margin-bottom: 20px;}
+#trans_magician_results li:first-child { margin-top: 20px;}
+#trans_magician_results li:last-child { margin-bottom: 20px;}
 
-#magician b {
+#trans_magician_results b {
 	padding-right: 10px;
 }
