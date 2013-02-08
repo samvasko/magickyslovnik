@@ -4,6 +4,8 @@
  * Dictionary magic
  */
 
+$(function() {
+
 var showMagic = {
 
 	letterKey : 83, // S
@@ -15,8 +17,8 @@ var showMagic = {
 
 	init : function() {
 
+		// Create elements!
 		this.element = $('<div/>', { 'id': 'magician', 'class': 'disabled' });
-		console.log(this.element.length);
 		this.inputField = $('<input />', {
 			'name': 'searchmagic',
 			'type': 'text',
@@ -24,20 +26,20 @@ var showMagic = {
 		this.element.append( $('<ul/>', {'id': 'results' }) );
 		this.element.append( $('<ul/>', {'id':'lang'}) );
 
+		// insert them into body
+		this.element = this.element.appendTo($(document.body));
+		this.list = this.element.find('#results');
+
 		// bind keys
 		$(document).keydown( this.open_key.bind(this) );
 		$(document).keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
 	},
 
-	open : function() {
+	opencloser : function() {
 		this.element.toggleClass('disabled');
-		if ( ! this.element.hasClass('disabled') ) {
-			$(document.body).prepend(this.element);
-			this.element = $('#magician');
-			this.list = this.element.find('#results');
-		}
-		this.inputField.focus();
+		// focus only when opening
+		if ( ! this.element.hasClass('disabled')) this.inputField.focus();
 	},
 
 	fetch : function(elem) {
@@ -88,7 +90,7 @@ var showMagic = {
 			event.preventDefault();
 			event.stopPropagation();
 
-			this.open();
+			this.opencloser();
 			return false;
 		}
 	},
@@ -105,3 +107,5 @@ var showMagic = {
 };
 
 showMagic.init();
+
+}());
