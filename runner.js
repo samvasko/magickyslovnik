@@ -22,14 +22,14 @@ var showMagic = {
 	init : function() {
 
 		// Create elements!
-		this.element = $('<div/>', { 'id': 'magician', 'class': 'disabled' });
+		this.element = $('<div/>', { 'id': 'trans_magician', 'class': 'trans_disabled' });
 		this.inputField = $('<input />', {
 			'name': 'searchmagic',
 			'type': 'text',
 			'id': 'searchmagic'}).appendTo(this.element);
 
-		this.langUl = $('<ul/>', {'id':'lang'}).appendTo(this.element);
-		this.listUl = $('<ul/>', {'id':'results'}).appendTo(this.element);
+		this.langUl = $('<ul/>', {'id':'trans_magician_lang'}).appendTo(this.element);
+		this.listUl = $('<ul/>', {'id':'trans_magician_results'}).appendTo(this.element);
 
 		// insert them into body
 		this.element = this.element.appendTo($(document.body));
@@ -41,17 +41,17 @@ var showMagic = {
 	},
 
 	opencloser : function() {
-		this.element.toggleClass('disabled');
+		this.element.toggleClass('trans_disabled');
 		// focus only when opening
-		if ( ! this.element.hasClass('disabled')) this.inputField.focus();
+		if ( ! this.element.hasClass('trans_disabled')) this.inputField.focus();
 	},
 
 	fetch : function(elem) {
-		var currentVal = this.inputField.val();
 
+		var currentVal = this.inputField.val();
 		if ( currentVal.length < 2 ) {
-			this.list.html('');
-			return false;
+			this.listUl.html('');
+			return true;
 		}
 		if ( currentVal == this.lastVal)
 		{
@@ -78,7 +78,6 @@ var showMagic = {
 			this.words = words;
 			this.render();
 		}.bind(this));
-		return true;
 	},
 
 	render : function() {
@@ -101,10 +100,10 @@ var showMagic = {
 		}
 	},
 	close_key : function(event) {
-		if (event.keyCode == 27 && !this.element.hasClass('disabled')) {
+		if (( event.keyCode == 13 || event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.element.toggleClass('disabled');
+			this.element.toggleClass('trans_disabled');
 			return false;
 		}
 	}
