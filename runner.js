@@ -4,44 +4,29 @@
  * Dictionary magic
  */
 
-$(function() {
-
 var showMagic = {
 
 	letterKey : 83, // S
-	element : $('<div/>', { 'id': 'magician', 'class': 'disabled' }),
-	inputField : {},
+	element : {}, inputField : {}, list : {}, lang : {},
 	lastVal : '',
-	from : 'anglicko',
-	to : 'slovensky',
+	from : 'anglicko', to : 'slovensky',
 	url : 'http://slovnik.azet.sk/preklad/',
 	words : [],
-	list : {},
-	lang : {},
 
 	init : function() {
 
-		// Create elements!
+		this.element = $('<div/>', { 'id': 'magician', 'class': 'disabled' });
+		console.log(this.element.length);
 		this.inputField = $('<input />', {
 			'name': 'searchmagic',
 			'type': 'text',
 			'id': 'searchmagic'}).appendTo(this.element);
-		this.list = this.element.append( $('<ul/>', {'id': 'results' }) );
-		this.languages = this.element.append( $('<ul/>', {'id':'lang'}) );
+		this.element.append( $('<ul/>', {'id': 'results' }) );
+		this.element.append( $('<ul/>', {'id':'lang'}) );
 
 		// bind keys
-		$(document).keydown(function(event){
-			console.log(event.keyCode);
-			if (event.keyCode == 83 && event.altKey) {
-				this.open();
-				return false;
-			}
-			if (event.keyCode == 27) {
-				this.element.toggleClass('disabled');
-			}
-		}.bind(this));
-
-		// bind typing
+		$(document).keydown( this.open_key.bind(this) );
+		$(document).keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
 	},
 
@@ -50,7 +35,7 @@ var showMagic = {
 		if ( ! this.element.hasClass('disabled') ) {
 			$(document.body).prepend(this.element);
 			this.element = $('#magician');
-			this.list = this.element.find('ul');
+			this.list = this.element.find('#results');
 		}
 		this.inputField.focus();
 	},
@@ -66,7 +51,6 @@ var showMagic = {
 			var words = [],
 				rawWords = $('table.p', data);
 
-			console.log(rawWords.length);
 			if (!rawWords.length) this.list.html('Ziadne vysledky');
 			rawWords.each(function() {
 				var	from = $(this).find('.z a').text(),
@@ -97,9 +81,27 @@ var showMagic = {
 		}
 
 		this.list.appendTo(this.element);
-
 	},
+	open_key : function (event) {
+		if (event.keyCode == 83 && event.altKey) {
+
+			event.preventDefault();
+			event.stopPropagation();
+
+			this.open();
+			return false;
+		}
+	},
+	close_key : function(event) {
+		if (event.keyCode == 27 && !this.element.hasClass('disabled')) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			this.element.toggleClass('disabled');
+
+			return false;
+		}
+	}
 };
 
 showMagic.init();
-}());
