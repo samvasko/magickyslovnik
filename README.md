@@ -25,3 +25,7 @@ Otvaranie dialogu
 Zatvaranie
 
 > ctr-alt-s, Esc, Enter
+
+Licencia
+-----------------
+[DBAD](https://github.com/philsturgeon/dbad/blob/master/LICENSE-en.md)
