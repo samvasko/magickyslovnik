@@ -63,17 +63,20 @@ var showMagic = {
 
 		jQuery.get(this.url + fromto.from + '-' + fromto.to, {q: currentVal }, function(data, textStatus) {
 			var words = [],
-				rawWords = $('table.p', data);
+				rawWords = jQuery('table.p', data);
+				console.log( rawWords );
 
 			// is this a bug or feature?
 			rawWords.each(function() {
 				var	from = $(this).find('.z a').text(),
 					to = [];
 
-				$(this).find('.do a:not(.lupa) span').each(function() {
-					to.push($(this).text());
+				jQuery(this).find('.do > span').each(function() {
+					to.push(jQuery(this).text());
+					console.log(jQuery(this).text());
 				});
 				words.push({ from:from, to:to });
+
 			});
 			this.words = words;
 			this.render();
