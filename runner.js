@@ -8,22 +8,29 @@ $(function() {
 
 var showMagic = {
 
-	letterKey : 83, // S
-	element : {}, inputField : {}, listUl : {}, langUl : {},
-	lastVal : '',
-	words : [],
-	url : 'http://slovnik.azet.sk/preklad/',
+	letterKey: 83, // S
+	element: {},   // element of the search field
+	inputField: {},
+	listUl: {}, // list of results
+	langUl: {}, // list of languages
+	lastVal: '', // last value from input
+	words: [],
+	url: 'http://slovnik.azet.sk/preklad/',
 
 	from: true,  // translate from slovak / to slovak
 
+	slovak: {
+		to: 'slovensky',   tname: 'Slovenský',
+		from: 'slovensko', fname: 'Slovensko'
+	},
 	languages : {
-		a: { from: 'anglicko', to: 'anglicky' },
-		n: { from: 'nemecko', to: 'nemecky' },
-		f: { from: 'francuzsko', to: 'francuzsky' },
-		s: { from: 'spanielsko', to: 'spanielsky' },
-		m: { from: 'madarsko', to: 'madarsky' },
-		t: { from: 'taliansko', to: 'taliansky' },
-		r: { from: 'rusko', to: 'rusky' }
+		a: { from: 'anglicko',   to: 'anglicky',   fname: 'Anglicko',   tname: 'Anglický' },
+		n: { from: 'nemecko',    to: 'nemecky',    fname: 'Nemecko',    tname: 'Nemecký' },
+		f: { from: 'francuzsko', to: 'francuzsky', fname: 'Francúzsko', tname: 'Francúzsky' },
+		s: { from: 'spanielsko', to: 'spanielsky', fname: 'Španielsko', tname: 'Španielsky' },
+		m: { from: 'madarsko',   to: 'madarsky',   fname: 'Maďarsko',   tname: 'Maďarský' },
+		t: { from: 'taliansko',  to: 'taliansky',  fname: 'Taliansko',  tname: 'Taliansky' },
+		r: { from: 'rusko',      to: 'rusky',      fname: 'Rusko',      tname: 'Ruský' }
 	},
 
 	init : function() {
@@ -35,8 +42,40 @@ var showMagic = {
 			'type': 'text',
 			'id': 'searchmagic'}).appendTo(this.element);
 
-		this.langUl = $('<ul/>', {'id':'trans_magician_lang'}).appendTo(this.element);
 		this.listUl = $('<ul/>', {'id':'trans_magician_results'}).appendTo(this.element);
+		this.langUl = $('<ul/>', {'id':'trans_magician_lang', 'class': 'trans_magician_hidden' }).appendTo(this.element);
+
+		var langlist = [];
+
+		for( var one in this.languages ) {
+			var langText = this.languages[one].tname;
+			if (one == 'a') {
+				console.log( one );
+				langText = this.slovak.from +' '+ this.languages[one].tname;
+			}
+			this.langUl.append( $('<li/>', { 'text': langText, 'id': 'trans_magician_lang_li' }) );
+		}
+
+		// bind events on language bar
+		// dropdown
+		this.langUl.hover(
+		function(event) {
+			this.langUl.removeClass('trans_magician_hidden');
+		}.bind(this),
+		function(event) {
+			this.langUl.addClass('trans_magician_hidden');
+		}.bind(this));
+
+		// click to switch
+		this.langFirstLi  = this.langUl.find('li:first-child');
+		this.langFirstLi.click(function(event) {
+			this.from = !this.from;
+			this.lang = this.shortLangString;
+		}.bind(this) );
+
+		// set default language and direction
+		this.from = true;
+		this.lang = 'a';
 
 		// insert them into body
 		this.element = this.element.appendTo($(document.body));
@@ -45,21 +84,27 @@ var showMagic = {
 		$(document).keydown( this.open_key.bind(this) );
 		$(document).keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
-
-		// set default language and direction
-		this.from = true;
-		this.lang = 'a';
 	},
 	get lang(){
 		return this.langString;
 	},
 	set lang(language){
-		var skt = 'slovensky', skf = 'slovensko';
+		this.shortLangString = language;
+
 		if (this.from) {
-			this.langString = skf + '-' + this.languages[language].to;
+			this.langString = this.slovak.from + '-' + this.languages[language].to;
+			this.langFirstLi.text( this.slovak.fname + ' ' + this.languages[language].tname );
 		} else {
-			this.langString = this.languages[language].from + '-' + skt;
+			this.langString = this.languages[language].from + '-' + this.slovak.to;
+			this.langFirstLi.text( this.languages[language].fname  + ' ' + this.slovak.tname);
 		}
+
+
+	},
+
+	switchLang: function(){
+		this.from = false;
+		this.lang = this.shortLangString;
 	},
 
 	opencloser : function() {
@@ -128,7 +173,7 @@ var showMagic = {
 			return false;
 		}
 	}
-}
+};
 
 showMagic.init();
 
