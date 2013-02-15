@@ -10,9 +10,9 @@ Kedze sa momentalne nachadza v intenzivnom vyvojom stadiu. Nieje ho este mozne n
 1. Stiahnut a rozbalit [tento archiv](https://github.com/bliker/magickyslovnik/archive/master.zip)
 2. V Chrome: menu -> tools -> extensions
 3. V pravo hole povolit Developer mod
-4. Vybrat zlozku s rozbalenym rozlisenim
+4. Vybrat zlozku s rozbalenym rozsirenie
 
-_rozlisenie funguje az po refreshi stranky_
+_rozsirenie funguje az po refreshi stranky_
 
 __Tato verzia sa neupdatuje automaticky, preto ju treba odstranit manualne a pockat na full verziu__
 
@@ -25,3 +25,7 @@ Otvaranie dialogu
 Zatvaranie
 
 > ctr-alt-s, Esc, Enter
+
+Licencia
+-----------------
+[DBAD](https://github.com/philsturgeon/dbad/blob/master/LICENSE-en.md)
