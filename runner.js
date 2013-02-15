@@ -12,13 +12,16 @@ var showMagic = {
 	element : {}, inputField : {}, listUl : {}, langUl : {},
 	lastVal : '',
 	languages : {
-		ensk : { from : 'anglicko', to : 'slovensky' },
-		sken : { from : 'slovensko', to : 'anglicky' }
+		a: { from: 'anglicko', to: 'anglicky' },
+		n: { from: 'nemecko', to: 'nemecky' },
+		f: { from: 'francuzsko', to: 'francuzsky' },
+		s: { from: 'spanielsko', to: 'spanielsky' },
+		m: { from: 'madarsko', to: 'madarsky' },
+		t: { from: 'taliansko', to: 'taliansky' },
+		r: { from: 'rusko', to: 'rusky' }
 	},
-	currentLang: 'sken', // default direction
 	url : 'http://slovnik.azet.sk/preklad/',
 	words : [],
-
 	init : function() {
 
 		// Create elements!
@@ -38,6 +41,14 @@ var showMagic = {
 		$(document).keydown( this.open_key.bind(this) );
 		$(document).keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
+	},
+
+	langString: function(langShort, from){
+		if (from) {
+			return this.languages.langShort.from;
+		} else {
+			return this.languages.langShort.to;
+		}
 	},
 
 	opencloser : function() {
