@@ -11,6 +11,11 @@ var showMagic = {
 	letterKey : 83, // S
 	element : {}, inputField : {}, listUl : {}, langUl : {},
 	lastVal : '',
+	words : [],
+	url : 'http://slovnik.azet.sk/preklad/',
+
+	from: true,  // translate from slovak / to slovak
+
 	languages : {
 		a: { from: 'anglicko', to: 'anglicky' },
 		n: { from: 'nemecko', to: 'nemecky' },
@@ -20,8 +25,7 @@ var showMagic = {
 		t: { from: 'taliansko', to: 'taliansky' },
 		r: { from: 'rusko', to: 'rusky' }
 	},
-	url : 'http://slovnik.azet.sk/preklad/',
-	words : [],
+
 	init : function() {
 
 		// Create elements!
@@ -41,13 +45,20 @@ var showMagic = {
 		$(document).keydown( this.open_key.bind(this) );
 		$(document).keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
-	},
 
-	langString: function(langShort, from){
-		if (from) {
-			return this.languages.langShort.from;
+		// set default language and direction
+		this.from = true;
+		this.lang = 'a';
+	},
+	get lang(){
+		return this.langString;
+	},
+	set lang(language){
+		var skt = 'slovensky', skf = 'slovensko';
+		if (this.from) {
+			this.langString = skf + '-' + this.languages[language].to;
 		} else {
-			return this.languages.langShort.to;
+			this.langString = this.languages[language].from + '-' + skt;
 		}
 	},
 
@@ -70,12 +81,9 @@ var showMagic = {
 		}
 
 		this.lastVal = currentVal;
-		var fromto = this.languages[this.currentLang];
-
-		jQuery.get(this.url + fromto.from + '-' + fromto.to, {q: currentVal }, function(data, textStatus) {
+		jQuery.get(this.url, {q: currentVal }, function(data, textStatus) {
 			var words = [],
 				rawWords = jQuery('table.p', data);
-				console.log( rawWords );
 
 			// is this a bug or feature?
 			rawWords.each(function() {
@@ -84,7 +92,6 @@ var showMagic = {
 
 				jQuery(this).find('.do > span').each(function() {
 					to.push(jQuery(this).text());
-					console.log(jQuery(this).text());
 				});
 				words.push({ from:from, to:to });
 
@@ -121,7 +128,7 @@ var showMagic = {
 			return false;
 		}
 	}
-};
+}
 
 showMagic.init();
 
