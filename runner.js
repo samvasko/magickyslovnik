@@ -34,6 +34,7 @@ var showMagic = {
 	},
 
 	init : function() {
+		var that = this;
 
 		// Create elements!
 		this.element = $('<div/>', { 'id': 'trans_magician', 'class': 'trans_disabled' });
@@ -45,44 +46,52 @@ var showMagic = {
 		this.listUl = $('<ul/>', {'id':'trans_magician_results'}).appendTo(this.element);
 		this.langUl = $('<ul/>', {'id':'trans_magician_lang', 'class': 'trans_magician_hidden' }).appendTo(this.element);
 
-		var langlist = [];
-
+		// selected language
+		this.langUl.append( $('<li/>', {
+			'text': this.slovak.from +' '+ this.languages['a'].tname,
+			'id': 'trans_magician_lang_li',
+			'data-lang': 'a'
+		}) );
+		// dropdown items
 		for( var one in this.languages ) {
-			var langText = this.languages[one].tname;
-			if (one == 'a') {
-				console.log( one );
-				langText = this.slovak.from +' '+ this.languages[one].tname;
-			}
-			this.langUl.append( $('<li/>', { 'text': langText, 'id': 'trans_magician_lang_li' }) );
+			this.langUl.append( $('<li/>', { 'text': this.languages[one].tname, 'id': 'trans_magician_lang_li', 'data-lang': one }) );
 		}
+
+		this.langFirstLi  = this.langUl.find('li:first-child');
+		this.langDropownLi = this.langFirstLi.siblings();
 
 		// bind events on language bar
 		// dropdown
 		this.langUl.hover(
 		function(event) {
-			this.langUl.removeClass('trans_magician_hidden');
-		}.bind(this),
+			that.langUl.removeClass('trans_magician_hidden');
+		},
 		function(event) {
-			this.langUl.addClass('trans_magician_hidden');
-		}.bind(this));
+			that.langUl.addClass('trans_magician_hidden');
+		});
 
 		// click to switch
-		this.langFirstLi  = this.langUl.find('li:first-child');
 		this.langFirstLi.click(function(event) {
-			this.from = !this.from;
-			this.lang = this.shortLangString;
-		}.bind(this) );
+			that.switchLang();
+		});
+
+		// dropdown to change
+		this.langDropownLi.click( function() {
+			// ignore clicks on disabled element
+			if ( $(this).hasClass('trans_li_disabled') ) return false;
+			that.changeLang( $(this).attr('data-lang') );
+		});
 
 		// set default language and direction
 		this.from = true;
-		this.lang = 'a';
+		this.changeLang('a');
 
 		// insert them into body
 		this.element = this.element.appendTo($(document.body));
 
 		// bind keys
 		$(document).keydown( this.open_key.bind(this) );
-		$(document).keyup( this.close_key.bind(this) );
+		$(document)	.keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
 	},
 	get lang(){
@@ -103,8 +112,19 @@ var showMagic = {
 	},
 
 	switchLang: function(){
-		this.from = false;
+		this.from = !this.from;
 		this.lang = this.shortLangString;
+	},
+
+	changeLang: function(slang){
+		var clicked = this.langDropownLi.filter('[data-lang="' + slang + '"]');
+		// disable the clicked
+		clicked.addClass('trans_li_disabled');
+		// enable the disabled !
+		clicked.siblings().removeClass('trans_li_disabled');
+		// set clicked to be current language in head of dropdown and in search
+		this.lang = slang;
+
 	},
 
 	opencloser : function() {
