@@ -39,6 +39,8 @@
 	outline: 0;
 }
 #trans_magician_lang {
+	margin: 0;
+	padding: 0;
 	position: absolute;
 	top: 1px;
 	right: 1px;
@@ -59,6 +61,8 @@
 }
 
 #trans_magician_lang_li {
+	padding: 0;
+	margin: 0;
 	font-size: 14px;
 	line-height: 25px;
 	text-align: center;
@@ -98,6 +102,7 @@
 }
 #trans_magician_results {
 	position: absolute;
+	padding: 0;
 	z-index: 996 !important;
 	margin-top: 0;
 	margin-left: 5%;
@@ -110,7 +115,7 @@
 
 #trans_magician_results li {
 	margin: 0 20px;
-	padding:2px 0;
+	padding:2px 0 !important;
 }
 
 #trans_magician_results li:first-child { margin-top: 20px;}
