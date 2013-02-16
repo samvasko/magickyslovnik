@@ -1,15 +1,28 @@
-#trans_magician, #trans_magician ul, #trans_magician input, #trans_magician li, #trans_magician_lang_li {
+/*------- Resets -------*/
+
+#trans_magician,
+#trans_magician input,
+#trans_magician_lang,
+#trans_magician_lang_li,
+#trans_magician_results,
+#trans_magician_results li,
+#trans_magician_results b
+{
 	z-index: 999;
 	display: inherit;
 	box-sizing: border-box;
 	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
 }
 
+/*------- Main styles -------*/
 #trans_magician {
 	position: fixed;
 	top: 13%;
 	left: 28%;
 	margin: 0 auto;
+	padding: 0;
+	background-color: transparent;
+	color: #111;
 	width: 42%;
 	height: 60px;
 	box-shadow: 0 30px 150px 29px #ccc;
@@ -20,10 +33,12 @@
 	overflow: hidden !important;
 }
 
-#trans_magician input {
-	margin: 0;
+#trans_magician input,
+#trans_magician input:focus {
 	position: relative;
 	display: block;
+	outline: 0;
+	margin: 0;
 	padding: 5px 15px;
 	width: 100%;
 	height: 60px;
@@ -35,24 +50,25 @@
 	font-weight: 200;
 	font-size: 22px;
 }
-#trans_magician input:focus {
-	outline: 0;
-}
+
+/*------- Language picker -------*/
 #trans_magician_lang {
-	margin: 0;
-	padding: 0;
+	color:#222;
 	position: absolute;
 	top: 1px;
 	right: 1px;
-	text-transform: capitalize;
-	width: 98px;
 	z-index: 1000;
-	color: #555;
-	line-height: 20px;
+	background-color: #fafafa;
 	overflow: visible;
-	transition: 0.8s all;
-	-webkit-transition: 0.8s all;
+	margin: 0;
+	padding: 0;
+	width: 98px;
 	height: 210px;
+	color: #555;
+	text-transform: capitalize;
+	line-height: 20px;
+	-webkit-transition: 0.8s all;
+	transition: 0.8s all;
 }
 
 .trans_magician_hidden {
@@ -61,51 +77,56 @@
 }
 
 #trans_magician_lang_li {
-	padding: 0;
+	position: relative;
 	margin: 0;
+	padding: 0;
+	background-color: #fafafa;
+	text-align: center;
 	font-size: 14px;
 	line-height: 25px;
-	text-align: center;
 	cursor: pointer;
-	position: relative;
-	background-color: #fafafa;
 }
 #trans_magician_lang_li:first-child {
-	transition: 0.8s all;
-	-webkit-transition: 0.8s all;
-	height: 58px;
-	line-height: 20px;
+	margin: 0;
+	color:#333;
 	padding: 11px 0 0 0 ;
 	width: 98px;
-	margin: 0;
+	height: 58px;
+	line-height: 20px;
+	-webkit-transition: 0.8s all;
+	transition: 0.8s all;
 }
 #trans_magician_lang_li:nth-child(2) {
 	box-shadow: inset 0 2px 1px -1px #eee;
 }
 #trans_magician_lang_li:nth-child(n+2):not(.trans_li_disabled):hover {
-	text-decoration: underline;
 	background-color: #fff;
+	text-decoration: underline;
 }
 #trans_magician_lang_li:nth-child(n+2):not(.trans_li_disabled):hover:after {
-	content: "◀";
 	position: absolute;
+	margin: 0;
+	padding: 0;
 	right: -1px;
 	color: #aaa;
+	content: "◀";
 }
 .trans_li_disabled {
 	color: #ccc;
 }
 
 #trans_magician_lang:hover:not(.trans_magician_hidden) #trans_magician_lang_li:first-child {
-	color:#eee;
 	background: #555556;
+	color:#eee;
 }
+
+/*------- Dropdown with results -------*/
 #trans_magician_results {
 	position: absolute;
-	padding: 0;
 	z-index: 996 !important;
 	margin-top: 0;
 	margin-left: 5%;
+	padding: 0;
 	width: 90%;
 	background-color: white;
 	box-shadow: 0 10px 20px #ccc;
@@ -122,5 +143,11 @@
 #trans_magician_results li:last-child { margin-bottom: 20px;}
 
 #trans_magician_results b {
-	padding-right: 10px;
+	padding: 0 10px 0 0;
+	font-weight: bold;
+	margin: 0;
+	display: inline-block !important;
 }
+
+
+

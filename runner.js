@@ -90,10 +90,14 @@ var showMagic = {
 		$(this.inputField).on('keyup', this.keypress.bind(this));
 	},
 
-
 	get lang(){
 		return this.langString;
 	},
+
+	/**
+	 * set language sting
+	 * @param {sting} language language name in short version
+	 */
 	set lang(language){
 		this.shortLangString = language;
 
@@ -110,11 +114,18 @@ var showMagic = {
 
 	},
 
+	/**
+	 * Switch direciton of translation
+	 */
 	switchLang: function(){
 		this.from = !this.from;
 		this.lang = this.shortLangString;
 	},
 
+	/**
+	 * Change language
+	 * @param  {string} slang language name in short format
+	 */
 	changeLang: function(slang){
 		var clicked = this.langDropownLi.filter('[data-lang="' + slang + '"]');
 		// disable the clicked
@@ -123,14 +134,23 @@ var showMagic = {
 		clicked.siblings().removeClass('trans_li_disabled');
 		// set clicked to be current language in head of dropdown and in search
 		this.lang = slang;
+		// close dropdown
+		this.langUl.addClass('trans_magician_hidden');
 	},
 
+	/**
+	 * Open/close the main windows
+	 */
 	opencloser : function() {
 		this.element.toggleClass('trans_disabled');
 		// focus only when opening
 		if ( ! this.element.hasClass('trans_disabled')) this.inputField.focus();
 	},
 
+	/**
+	 * Happens on everykeyup
+	 * @param  {boolean} force will force refresh
+	 */
 	keypress: function(force){
 		var currentVal = this.inputField.val();
 		if (currentVal.length == 2 ) {
@@ -153,6 +173,10 @@ var showMagic = {
 		this.fetch(force);
 	},
 
+	/**
+	 * Grab text from input at fetch results
+	 * @param  {string} force will download word even when string did not change
+	 */
 	fetch : function(force) {
 		var currentVal = this.inputField.val();
 		if ( ( (currentVal == this.lastVal)  && !force ) || currentVal.length < 2 || currentVal.match(/[\.,\/\\]/) )
@@ -181,6 +205,9 @@ var showMagic = {
 		}.bind(this));
 	},
 
+	/**
+	 * Write results to the UL
+	 */
 	render : function() {
 		if (!this.words) console.error('missing words');
 		this.listUl.html('');
@@ -192,6 +219,11 @@ var showMagic = {
 		}
 		this.listUl.appendTo(this.element);
 	},
+
+	/**
+	 * Keys that open main window
+	 * @param  {object} event jQuery event
+	 */
 	open_key : function (event) {
 		if (event.keyCode == 83 && event.altKey) {
 			event.preventDefault();
@@ -200,6 +232,11 @@ var showMagic = {
 			return false;
 		}
 	},
+
+	/**
+	 * Keys that close the main windows
+	 * @param  {object} event jQuery event
+	 */
 	close_key : function(event) {
 		if (( event.keyCode == 13 || event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
