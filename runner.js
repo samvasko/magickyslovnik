@@ -238,10 +238,11 @@ var showMagic = {
 	 * @param  {object} event jQuery event
 	 */
 	close_key : function(event) {
+
 		if (( event.keyCode == 13 || event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.element.toggleClass('trans_disabled');
+			this.opencloser();
 			return false;
 		}
 	}
