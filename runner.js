@@ -63,17 +63,12 @@ var showMagic = {
 		// bind events on language bar
 		// dropdown
 		this.langUl.hover(
-		function(event) {
-			that.langUl.removeClass('trans_magician_hidden');
-		},
-		function(event) {
-			that.langUl.addClass('trans_magician_hidden');
-		});
+		function() { that.langUl.removeClass('trans_magician_hidden'); },
+		function() { that.langUl.addClass('trans_magician_hidden'); }
+		);
 
-		// click to switch
-		this.langFirstLi.click(function(event) {
-			that.switchLang();
-		});
+		// click to switch lang
+		this.langFirstLi.click(function() { that.switchLang(); });
 
 		// dropdown to change
 		this.langDropownLi.click( function() {
@@ -92,8 +87,10 @@ var showMagic = {
 		// bind keys
 		$(document).keydown( this.open_key.bind(this) );
 		$(document)	.keyup( this.close_key.bind(this) );
-		$(this.inputField).on('keyup keydown', this.fetch.bind(this));
+		$(this.inputField).on('keyup', this.keypress.bind(this));
 	},
+
+
 	get lang(){
 		return this.langString;
 	},
@@ -107,6 +104,8 @@ var showMagic = {
 			this.langString = this.languages[language].from + '-' + this.slovak.to;
 			this.langFirstLi.text( this.languages[language].fname  + ' ' + this.slovak.tname);
 		}
+
+		this.fetch(true);
 
 
 	},
@@ -124,7 +123,6 @@ var showMagic = {
 		clicked.siblings().removeClass('trans_li_disabled');
 		// set clicked to be current language in head of dropdown and in search
 		this.lang = slang;
-
 	},
 
 	opencloser : function() {
@@ -133,20 +131,37 @@ var showMagic = {
 		if ( ! this.element.hasClass('trans_disabled')) this.inputField.focus();
 	},
 
-	fetch : function(elem) {
-
+	keypress: function(force){
 		var currentVal = this.inputField.val();
+		if (currentVal.length == 2 ) {
+			if ( currentVal.match(/^(\.[anfsmtr])/g) ) {
+				this.from = true;
+				this.changeLang(currentVal[1]);
+				this.inputField.val('');
+				return false;
+			} else if ( currentVal.match(/^([anfsmtr]\.)/g) ) {
+				this.from = false;
+				this.changeLang(currentVal[0]);
+				this.inputField.val('');
+				return false;
+			}
+		}
 		if ( currentVal.length < 2 ) {
 			this.listUl.html('');
 			return true;
 		}
-		if ( currentVal == this.lastVal)
+		this.fetch(force);
+	},
+
+	fetch : function(force) {
+		var currentVal = this.inputField.val();
+		if ( ( (currentVal == this.lastVal)  && !force ) || currentVal.length < 2 || currentVal.match(/[\.,\/\\]/) )
 		{
 			return true;
 		}
 
 		this.lastVal = currentVal;
-		jQuery.get(this.url, {q: currentVal }, function(data, textStatus) {
+		jQuery.get(this.url + this.langString , {q: currentVal }, function(data, textStatus) {
 			var words = [],
 				rawWords = jQuery('table.p', data);
 

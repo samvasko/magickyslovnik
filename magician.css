@@ -1,4 +1,4 @@
-#trans_magician, #trans_magician ul, #trans_magician input, #trans_magician li {
+#trans_magician, #trans_magician ul, #trans_magician input, #trans_magician li, #trans_magician_lang_li {
 	z-index: 999;
 	display: inherit;
 	box-sizing: border-box;
@@ -98,7 +98,7 @@
 }
 #trans_magician_results {
 	position: absolute;
-	z-index: 997;
+	z-index: 996 !important;
 	margin-top: 0;
 	margin-left: 5%;
 	width: 90%;
