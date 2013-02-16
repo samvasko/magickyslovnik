@@ -157,12 +157,12 @@ var showMagic = {
 			if ( currentVal.match(/^(\.[anfsmtr])/g) ) {
 				this.from = true;
 				this.changeLang(currentVal[1]);
-				this.inputField.val('');
+				this.postKeypress();
 				return false;
 			} else if ( currentVal.match(/^([anfsmtr]\.)/g) ) {
 				this.from = false;
 				this.changeLang(currentVal[0]);
-				this.inputField.val('');
+				this.postKeypress();
 				return false;
 			}
 		}
@@ -171,6 +171,17 @@ var showMagic = {
 			return true;
 		}
 		this.fetch(force);
+	},
+
+	/**
+	 * Stuff what happens after keystroke language change
+	 */
+	postKeypress: function(){
+		this.inputField.val('');
+		this.langFirstLi.addClass('trans_magician_alert');
+		setTimeout( function(){
+			this.langFirstLi.removeClass('trans_magician_alert');
+		}.bind(this) , 400);
 	},
 
 	/**
@@ -225,7 +236,7 @@ var showMagic = {
 	 * @param  {object} event jQuery event
 	 */
 	open_key : function (event) {
-		if (event.keyCode == 83 && event.altKey) {
+		if (event.keyCode == this.letterKey && event.altKey) {
 			event.preventDefault();
 			event.stopPropagation();
 			this.opencloser();
@@ -238,7 +249,7 @@ var showMagic = {
 	 * @param  {object} event jQuery event
 	 */
 	close_key : function(event) {
-
+		// enter & esc
 		if (( event.keyCode == 13 || event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
 			event.stopPropagation();

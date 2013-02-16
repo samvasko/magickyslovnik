@@ -115,9 +115,9 @@
 	color: #ccc;
 }
 
-#trans_magician_lang:hover:not(.trans_magician_hidden) #trans_magician_lang_li:first-child {
-	background: #555556;
-	color:#eee;
+#trans_magician_lang:hover:not(.trans_magician_hidden) #trans_magician_lang_li:first-child, .trans_magician_alert {
+	background: #555556 !important;
+	color:#eee !important;
 }
 
 /*------- Dropdown with results -------*/
