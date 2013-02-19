@@ -10,6 +10,7 @@
 {
 	z-index: 999;
 	display: inherit;
+	text-align: left;
 	box-sizing: border-box;
 	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
 }
