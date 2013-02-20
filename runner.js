@@ -153,16 +153,29 @@ var showMagic = {
 	 */
 	keypress: function(force){
 		var currentVal = this.inputField.val();
+
+
+		// Two dots switch language
+		var replacedVal = currentVal.replace('..', '');
+		if (replacedVal !=  currentVal ) {
+			this.switchLang();
+			this.changeAlert();
+			this.inputField.val(replacedVal);
+			this.fetch(force);
+		}
+
 		if (currentVal.length == 2 ) {
 			if ( currentVal.match(/^(\.[anfsmtr])/g) ) {
 				this.from = true;
 				this.changeLang(currentVal[1]);
-				this.postKeypress();
+				this.inputField.val('');
+				this.changeAlert();
 				return false;
 			} else if ( currentVal.match(/^([anfsmtr]\.)/g) ) {
 				this.from = false;
 				this.changeLang(currentVal[0]);
-				this.postKeypress();
+				this.inputField.val('');
+				this.changeAlert();
 				return false;
 			}
 		}
@@ -176,8 +189,7 @@ var showMagic = {
 	/**
 	 * Stuff what happens after keystroke language change
 	 */
-	postKeypress: function(){
-		this.inputField.val('');
+	changeAlert: function(){
 		this.langFirstLi.addClass('trans_magician_alert');
 		setTimeout( function(){
 			this.langFirstLi.removeClass('trans_magician_alert');
@@ -189,6 +201,8 @@ var showMagic = {
 	 * @param  {string} force will download word even when string did not change
 	 */
 	fetch : function(force) {
+
+
 		var currentVal = this.inputField.val();
 		if ( ( (currentVal == this.lastVal)  && !force ) || currentVal.length < 2 || currentVal.match(/[\.,\/\\]/) )
 		{
@@ -198,7 +212,7 @@ var showMagic = {
 		this.lastVal = currentVal;
 		jQuery.get(this.url + this.langString , {q: currentVal }, function(data, textStatus) {
 			var words = [],
-				rawWords = jQuery('table.p', data);
+				rawWords = jQuery('table.p:not(.poslovach)', data);
 
 			// is this a bug or feature?
 			rawWords.each(function() {
@@ -227,6 +241,9 @@ var showMagic = {
 			$('<li/>').text( current.to.join(' | ') )
 						.prepend($('<b/>').text(current.from))
 						.appendTo(this.listUl);
+			if (word > 10) {
+				break;
+			}
 		}
 		this.listUl.appendTo(this.element);
 	},
