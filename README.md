@@ -1,6 +1,6 @@
 #Magicky Slovnik
 
-Slovnik ktory dokaze prelozit slova do roznych jazykov neuveritelne rychlo. Dostupny je ako rozsirenie do Google Chrome.
+Slovnik ktory dokaze prelozit slova do roznych jazykov neuveritelne rychlo. Otvori sa na kazdej strake po stlaceni klavesovej skratky. Dostupny je ako rozsirenie do Google Chrome.
 
 ## Instalacia
 Kedze sa momentalne nachadza v intenzivnom vyvojom stadiu. Nieje ho este mozne najst na Google WebStore. Taktiez nieje ani zabaleny.
