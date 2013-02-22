@@ -16,6 +16,8 @@ var showMagic = {
 	lastVal: '', // last value from input
 	words: [],
 	url: 'http://slovnik.azet.sk/preklad/',
+	delay: 400, // delay for fetching in ms
+	timeout: 0,
 
 	from: true,  // translate from slovak / to slovak
 
@@ -53,7 +55,7 @@ var showMagic = {
 			'data-lang': 'a'
 		}) );
 		// dropdown items
-		for( var one in this.languages ) {
+		for(var one in this.languages ) {
 			this.langUl.append( $('<li/>', { 'text': this.languages[one].tname, 'id': 'trans_magician_lang_li', 'data-lang': one }) );
 		}
 
@@ -71,9 +73,11 @@ var showMagic = {
 		this.langFirstLi.click(function() { that.switchLang(); });
 
 		// dropdown to change
-		this.langDropownLi.click( function() {
+		this.langDropownLi.click(function() {
 			// ignore clicks on disabled element
-			if ( $(this).hasClass('trans_li_disabled') ) return false;
+			if ( $(this).hasClass('trans_li_disabled') ) {
+                return false;
+            }
 			that.changeLang( $(this).attr('data-lang') );
 		});
 
@@ -86,7 +90,7 @@ var showMagic = {
 
 		// bind keys
 		$(document).keydown( this.open_key.bind(this) );
-		$(document)	.keyup( this.close_key.bind(this) );
+		$(document).keyup( this.close_key.bind(this) );
 		$(this.inputField).on('keyup', this.keypress.bind(this));
 	},
 
@@ -110,8 +114,6 @@ var showMagic = {
 		}
 
 		this.fetch(true);
-
-
 	},
 
 	/**
@@ -144,7 +146,9 @@ var showMagic = {
 	opencloser : function() {
 		this.element.toggleClass('trans_disabled');
 		// focus only when opening
-		if ( ! this.element.hasClass('trans_disabled')) this.inputField.focus();
+		if ( ! this.element.hasClass('trans_disabled')) {
+            this.inputField.focus();
+        }
 	},
 
 	/**
@@ -153,10 +157,8 @@ var showMagic = {
 	 */
 	keypress: function(force){
 		var currentVal = this.inputField.val();
+		var replacedVal = currentVal.replace('..', ''); // Two dots switch language
 
-
-		// Two dots switch language
-		var replacedVal = currentVal.replace('..', '');
 		if (replacedVal !=  currentVal ) {
 			this.switchLang();
 			this.changeAlert();
@@ -201,33 +203,31 @@ var showMagic = {
 	 * @param  {string} force will download word even when string did not change
 	 */
 	fetch : function(force) {
-
-
 		var currentVal = this.inputField.val();
-		if ( ( (currentVal == this.lastVal)  && !force ) || currentVal.length < 2 || currentVal.match(/[\.,\/\\]/) )
-		{
+		if ( ( (currentVal == this.lastVal)  && !force ) || currentVal.length < 2 || currentVal.match(/[\.,\/\\]/) ) {
 			return true;
 		}
+		clearTimeout(this.timeout);
+		this.timeout = setTimeout(function () {
+			this.lastVal = currentVal;
+			jQuery.get(this.url + this.langString , {q: currentVal }, function(data, textStatus) {
+				var words = [],
+					rawWords = jQuery('table.p:not(.poslovach)', data);
 
-		this.lastVal = currentVal;
-		jQuery.get(this.url + this.langString , {q: currentVal }, function(data, textStatus) {
-			var words = [],
-				rawWords = jQuery('table.p:not(.poslovach)', data);
+				// is this a bug or feature?
+				rawWords.each(function() {
+					var	from = $(this).find('.z a').text(),
+						to = [];
 
-			// is this a bug or feature?
-			rawWords.each(function() {
-				var	from = $(this).find('.z a').text(),
-					to = [];
-
-				jQuery(this).find('.do > span').each(function() {
-					to.push(jQuery(this).text());
+					jQuery(this).find('.do > span').each(function() {
+						to.push(jQuery(this).text());
+					});
+					words.push({ from:from, to:to });
 				});
-				words.push({ from:from, to:to });
-
-			});
-			this.words = words;
-			this.render();
-		}.bind(this));
+				this.words = words;
+				this.render();
+			}.bind(this));
+		}.bind(this), this.delay );
 	},
 
 	/**
@@ -236,6 +236,7 @@ var showMagic = {
 	render : function() {
 		if (!this.words) console.error('missing words');
 		this.listUl.html('');
+
 		for(var word in this.words ) {
 			var current = this.words[word];
 			$('<li/>').text( current.to.join(' | ') )
@@ -252,7 +253,7 @@ var showMagic = {
 	 * Keys that open main window
 	 * @param  {object} event jQuery event
 	 */
-	open_key : function (event) {
+	open_key : function(event) {
 		if (event.keyCode == this.letterKey && event.altKey) {
 			event.preventDefault();
 			event.stopPropagation();
