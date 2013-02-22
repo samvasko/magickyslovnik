@@ -6,8 +6,13 @@
   "description": "Som iba beta, nezabudni ma prosim zmazat neskor",
   "permissions":
   [
+    "webRequest",
+    "webRequestBlocking",
     "<all_urls>"
   ],
+  "background": {
+    "scripts": ["background.js"]
+  },
   "content_scripts":
   [
     {
