@@ -27,6 +27,8 @@ Jazyk mozes prepinat napisanim bodky pred alebo za prve pismeno cudzieho jazyka.
 
 > n. : Nemecko - Slovensky
 
+jazyk sa da prehodit aj napisanim dvoch bodiek
+
 Ovela jednoduchsie ako to znie.
 
 ## Licencia
