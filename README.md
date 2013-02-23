@@ -3,7 +3,9 @@
 Slovnik ktory dokaze prelozit slova do roznych jazykov neuveritelne rychlo. Otvori sa na kazdej strake po stlaceni klavesovej skratky. Dostupny je ako rozsirenie do Google Chrome.
 
 ## Instalacia
-Kedze sa momentalne nachadza v intenzivnom vyvojom stadiu. Nieje ho este mozne najst na Google WebStore. Taktiez nieje ani zabaleny.
+Slovink je momentalne dostupny na [google webstore](https://chrome.google.com/webstore/detail/magicky-slovnik/docngneaojcfolnjhmlkmpjjpfijobib?hl=en-US)
+
+Pre instalaciu developer verzie (ktora je obycajne rovnaka)
 
 1. Stiahnut a rozbalit [tento archiv](https://github.com/bliker/magickyslovnik/archive/master.zip)
 2. V Chrome: menu -> tools -> extensions
@@ -20,7 +22,7 @@ Otvaranie dialogu
 > ctr - alt - s ( Alebo aj alt-s )
 
 Zatvaranie
-> ctr-alt-s, Esc, Enter
+> ctr-alt-s, Esc
 
 Jazyk mozes prepinat napisanim bodky pred alebo za prve pismeno cudzieho jazyka. Bodka pred znamena preklad do cudzieho jazyka, bodka za robi opak.
 >.a : Slovensko - Anglicky
