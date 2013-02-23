@@ -1,9 +1,10 @@
 {
-  "name": "Magicky slovnik ~ Beta",
+  "name": "Magicky slovnik",
   "version": "0.9",
   "author": "Samuel Vasko",
   "manifest_version": 2,
-  "description": "Som iba beta, nezabudni ma prosim zmazat neskor",
+  "homepage_url": "https://github.com/bliker/magickyslovnik",
+  "description": "Prekladaj do viacerych jazykov neuveritelne rychlo",
   "icons": { "16": "16.png",
              "48": "48.png",
             "128": "128.png" },
