@@ -1,10 +1,10 @@
 {
   "name": "Magicky slovnik",
-  "version": "0.9",
+  "version": "0.97",
   "author": "Samuel Vasko",
   "manifest_version": 2,
   "homepage_url": "https://github.com/bliker/magickyslovnik",
-  "description": "Prekladaj do viacerych jazykov neuveritelne rychlo",
+  "description": "Najjednoduchší spôsob prekladania - priamo zo stránky, ktorou práve surfujete.",
   "icons": { "16": "16.png",
              "48": "48.png",
             "128": "128.png" },

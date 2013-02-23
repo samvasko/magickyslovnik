@@ -268,7 +268,7 @@ var showMagic = {
 	 */
 	close_key : function(event) {
 		// enter & esc
-		if (( event.keyCode == 13 || event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
+		if (( event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
 			event.stopPropagation();
 			this.opencloser();
