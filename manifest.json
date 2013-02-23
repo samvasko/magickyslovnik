@@ -4,6 +4,9 @@
   "author": "Samuel Vasko",
   "manifest_version": 2,
   "description": "Som iba beta, nezabudni ma prosim zmazat neskor",
+  "icons": { "16": "16.png",
+             "48": "48.png",
+            "128": "128.png" },
   "permissions":
   [
     "webRequest",
