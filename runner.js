@@ -76,8 +76,8 @@ var showMagic = {
 		this.langDropownLi.click(function() {
 			// ignore clicks on disabled element
 			if ( $(this).hasClass('trans_li_disabled') ) {
-                return false;
-            }
+				return false;
+			}
 			that.changeLang( $(this).attr('data-lang') );
 		});
 
@@ -143,12 +143,16 @@ var showMagic = {
 	/**
 	 * Open/close the main windows
 	 */
-	opencloser : function() {
+	opencloser : function(open) {
 		this.element.toggleClass('trans_disabled');
 		// focus only when opening
-		if ( ! this.element.hasClass('trans_disabled')) {
-            this.inputField.focus();
-        }
+		if (open) {
+			this.inputField.focus();
+		} else {
+			// clear on the end
+			this.inputField.val('');
+			this.listUl.html('');
+		}
 	},
 
 	/**
@@ -166,7 +170,7 @@ var showMagic = {
 			this.fetch(force);
 		}
 
-		if (currentVal.length == 2 ) {
+		if (currentVal.length == 2 ) {				// language changing sequence deteced
 			if ( currentVal.match(/^(\.[anfsmtr])/g) ) {
 				this.from = true;
 				this.changeLang(currentVal[1]);
@@ -257,7 +261,7 @@ var showMagic = {
 		if (event.keyCode == this.letterKey && event.altKey) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.opencloser();
+			this.opencloser(true);
 			return false;
 		}
 	},
@@ -271,7 +275,7 @@ var showMagic = {
 		if (( event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.opencloser();
+			this.opencloser(false);
 			return false;
 		}
 	}
