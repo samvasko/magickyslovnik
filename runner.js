@@ -15,8 +15,11 @@ var showMagic = {
 	langUl: {}, // list of languages
 	lastVal: '', // last value from input
 	words: [],
-	url: 'http://slovnik.azet.sk/preklad/',
-	delay: 400, // delay for fetching in ms
+	sauce: 0,
+	url: {
+		azet: 'http://slovnik.azet.sk/preklad/'
+	},
+	delay: 200, // delay for fetching in ms
 	timeout: 0,
 
 	from: true,  // translate from slovak / to slovak
@@ -84,6 +87,9 @@ var showMagic = {
 		// set default language and direction
 		this.from = true;
 		this.changeLang('a');
+
+		// pick sauce
+		this.sauce = this.azet.bind(this);
 
 		// insert them into body
 		this.element = this.element.appendTo($(document.body));
@@ -213,25 +219,28 @@ var showMagic = {
 		}
 		clearTimeout(this.timeout);
 		this.timeout = setTimeout(function () {
-			this.lastVal = currentVal;
-			jQuery.get(this.url + this.langString , {q: currentVal }, function(data, textStatus) {
-				var words = [],
-					rawWords = jQuery('table.p:not(.poslovach)', data);
-
-				// is this a bug or feature?
-				rawWords.each(function() {
-					var	from = $(this).find('.z a').text(),
-						to = [];
-
-					jQuery(this).find('.do > span').each(function() {
-						to.push(jQuery(this).text());
-					});
-					words.push({ from:from, to:to });
-				});
-				this.words = words;
-				this.render();
-			}.bind(this));
+			this.sauce.call(this, currentVal);
 		}.bind(this), this.delay );
+	},
+
+	azet: function(query){
+		jQuery.get(this.url.azet + this.langString , {q: query }, function(data, textStatus) {
+			var words = [],
+				rawWords = jQuery('table.p:not(.poslovach)', data);
+
+			// is this a bug or feature?
+			rawWords.each(function() {
+				var	from = $(this).find('.z a').text(),
+					to = [];
+
+				jQuery(this).find('.do > span').each(function() {
+					to.push(jQuery(this).text());
+				});
+				words.push({ from:from, to:to });
+			});
+			this.words = words;
+			this.render();
+		}.bind(this));
 	},
 
 	/**
