@@ -17,7 +17,12 @@ var showMagic = {
 	words: [],
 	sauce: 0,
 	url: {
-		azet: 'http://slovnik.azet.sk/preklad/'
+		azet: 'http://slovnik.azet.sk/preklad/',
+		thesaurus: 'http://words.bighugelabs.com/api/2/4fa90f8d3320ec7bcdbff4f49cf85c5d/'
+	},
+	matching: {
+		from: /^\.[anfsmtr]/g,
+		to: /^[anfsmtr]\./g
 	},
 	delay: 200, // delay for fetching in ms
 	timeout: 0,
@@ -169,7 +174,8 @@ var showMagic = {
 		var currentVal = this.inputField.val();
 		var replacedVal = currentVal.replace('..', ''); // Two dots switch language
 
-		if (replacedVal !=  currentVal ) {
+		// There were two dots there,
+		if (replacedVal != currentVal ) {
 			this.switchLang();
 			this.changeAlert();
 			this.inputField.val(replacedVal);
@@ -177,25 +183,52 @@ var showMagic = {
 		}
 
 		if (currentVal.length == 2 ) {				// language changing sequence deteced
-			if ( currentVal.match(/^(\.[anfsmtr])/g) ) {
-				this.from = true;
-				this.changeLang(currentVal[1]);
-				this.inputField.val('');
-				this.changeAlert();
+			if ( currentVal.match(this.matching.from) )
+			{
+				this.fromHandler(currentVal);
 				return false;
-			} else if ( currentVal.match(/^([anfsmtr]\.)/g) ) {
-				this.from = false;
-				this.changeLang(currentVal[0]);
-				this.inputField.val('');
-				this.changeAlert();
+			}
+			else if ( currentVal.match(this.matching.to) )
+			{
+				this.toHandler(currentVal);
+				return false;
+			}
+			else if (currentVal == 'tt')
+			{
+				this.thesaurusHandler();
 				return false;
 			}
 		}
-		if ( currentVal.length < 2 ) {
+		if ( currentVal.length < 3 ) {
 			this.listUl.html('');
 			return true;
 		}
 		this.fetch(force);
+	},
+
+	/**
+	 * Change handlers
+	 */
+	fromHandler: function(currentVal){
+		this.sauce = this.azet;
+		this.from = true;
+		this.changeLang(currentVal[1]);
+		this.inputField.val('');
+		this.changeAlert();
+	},
+
+	toHandler: function(currentVal){
+		this.sauce = this.azet;
+		this.from = false;
+		this.changeLang(currentVal[0]);
+		this.inputField.val('');
+		this.changeAlert();
+	},
+
+	thesaurusHandler: function(currentVal){
+		this.sauce = this.thesaurus;
+		this.inputField.val('');
+		this.changeAlert();
 	},
 
 	/**
@@ -223,6 +256,11 @@ var showMagic = {
 		}.bind(this), this.delay );
 	},
 
+	/**
+	 * Azet fetching
+	 * @param  {[type]} query [description]
+	 * @return {[type]}       [description]
+	 */
 	azet: function(query){
 		jQuery.get(this.url.azet + this.langString , {q: query }, function(data, textStatus) {
 			var words = [],
@@ -238,20 +276,37 @@ var showMagic = {
 				});
 				words.push({ from:from, to:to });
 			});
-			this.words = words;
-			this.render();
+			this.render(words);
 		}.bind(this));
+	},
+
+	thesaurus: function(query){
+		var words = [];
+		jQuery.getJSON(this.url.thesaurus + query + '/json').done(
+		function(data) {
+			for (var type in data) {
+				words.push({
+					from: type,
+					to: data[type]['syn']
+				});
+			}
+			this.render(words);
+		}.bind(this)).fail(
+		function() {
+			return false;
+			// error handling
+		});
 	},
 
 	/**
 	 * Write results to the UL
 	 */
-	render : function() {
-		if (!this.words) console.error('missing words');
+	render : function(words) {
+		if (!words) console.error('missing words');
 		this.listUl.html('');
 
-		for(var word in this.words ) {
-			var current = this.words[word];
+		for(var word in words ) {
+			var current = words[word];
 			$('<li/>').text( current.to.join(' | ') )
 						.prepend($('<b/>').text(current.from))
 						.appendTo(this.listUl);
