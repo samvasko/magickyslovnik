@@ -147,7 +147,7 @@ var showMagic = {
 	 * Change language
 	 * @param  {string} slang language name in short format
 	 */
-	changeLang: function(slang){
+	changeLang: function(slang) {
 		var selected = this.langDropownLi.filter('[data-lang="' + slang + '"]');
 		// disable the selected
 		selected.addClass('disabled');
@@ -160,10 +160,24 @@ var showMagic = {
 	},
 
 	/**
+	 * Open the main window
+	 */
+	open: function() {
+
+
+	},
+
+	close: function() {
+
+	},
+
+
+	/**
 	 * Open or close tha main window
-	 * @param  {bool} open 	 are we opening
+	 * @param  {bool} open 	 are we opening?
 	 */
 	opencloser : function(open) {
+
 		if (open) {
 			this.inputField.focus();
 		} else {
@@ -332,7 +346,7 @@ var showMagic = {
 		if (event.keyCode == this.letterKey && event.altKey) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.opencloser(true);
+			this.open();
 			return false;
 		}
 	},
@@ -346,7 +360,7 @@ var showMagic = {
 		if (( event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.opencloser(false);
+			this.close();
 			return false;
 		}
 	}
