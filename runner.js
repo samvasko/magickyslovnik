@@ -23,7 +23,6 @@ var showMagic = {
 	},
 	delay: 200, // delay for fetching in ms
 	timeout: 0,
-
 	from: true,  // translate from slovak / to slovak
 
 	slovak: {
@@ -42,22 +41,18 @@ var showMagic = {
 
 	init : function() {
 		var that = this;
-		jQuery.get(this.template, bindEvents);
+		jQuery.get(this.template, this.bindEvents.bind(this));
 
-		// set default language and direction
-		this.from = true;
-		this.changeLang('a');
+		// TODO: move this to the opening method
+		// this.from = true;
+		// this.changeLang('a');
 
 		// pick sauce
 		this.sauce = this.azet.bind(this);
 
-		// insert them into body
-		this.element = this.element.appendTo($(document.body));
-
 		// bind keys
-		$(document).keydown( this.open_key.bind(this) );
-		$(document).keyup( this.close_key.bind(this) );
-		$(this.inputField).on('keyup', this.keypress.bind(this));
+		$(document).keydown( this.openKey.bind(this) );
+		$(document).keyup( this.closeKey.bind(this) );
 	},
 
 	get lang(){
@@ -87,29 +82,38 @@ var showMagic = {
 	 * @param  {string} data Unparsed template
 	 */
 	bindEvents: function(data) {
+
 		// Parse template
 		var template = $(data),
 			langUl = $('.languages', template),
-			langList = createList();
+			langList = this.createList();
 
 		langUl.append(langList);
 
-		this.langUl.hover(
-			function() { that.langUl.removeClass('trans_magician_hidden'); },
-			function() { that.langUl.addClass('trans_magician_hidden'); }
+		langUl.hover(
+			function() { this.langUl.addClass('visible'); },
+			function() { this.langUl.removeClass('visible'); }
 		);
 
-		var langFirstLi = langUl.children().first();
-		this.langFirstLi.click(that.switchLang.bind(that));
+		var langFirstLi = langUl.children().first(),
+			langDropownLi = langFirstLi.siblings();
+
+		langFirstLi.click(this.switchLang.bind(this));
 
 		// dropdown to change
-		this.langDropownLi.click(function() {
-			// ignore clicks on disabled element
+		langFirstLi.siblings().click(function() {
 			if ( $(this).hasClass('disabled') ) {
 				return false;
 			}
-			that.changeLang( $(this).attr('data-lang') );
+			this.changeLang( $(this).attr('data-lang') );
 		});
+
+		$('magic_input', template).on('keyup', this.keypress.bind(this));
+		/**
+		 * TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST
+		 *
+		 */
+		this.langFirstLi = langFirstLi;
 
 		// expose the object for injection
 		this.template = template;
@@ -117,7 +121,7 @@ var showMagic = {
 
 	/**
 	 * Create list of languages for the dropown picker
-	 * @return {mixed} ul of languages
+	 * @return {mixed} ul of languages with properties
 	 */
 	createList: function(){
 		var list = [];
@@ -144,23 +148,22 @@ var showMagic = {
 	 * @param  {string} slang language name in short format
 	 */
 	changeLang: function(slang){
-		var clicked = this.langDropownLi.filter('[data-lang="' + slang + '"]');
-		// disable the clicked
-		clicked.addClass('disabled');
+		var selected = this.langDropownLi.filter('[data-lang="' + slang + '"]');
+		// disable the selected
+		selected.addClass('disabled');
 		// enable the disabled !
-		clicked.siblings().removeClass('disabled');
-		// set clicked to be current language in head of dropdown and in search
+		selected.siblings().removeClass('disabled');
+		// set selected to be current language in head of dropdown and in search
 		this.lang = slang;
 		// close dropdown
 		this.langUl.removeClass('visible');
 	},
 
 	/**
-	 * Open/close the main windows
+	 * Open or close tha main window
+	 * @param  {bool} open 	 are we opening
 	 */
 	opencloser : function(open) {
-		this.element.toggleClass('disabled');
-		// focus only when opening
 		if (open) {
 			this.inputField.focus();
 		} else {
@@ -325,7 +328,7 @@ var showMagic = {
 	 * Keys that open main window
 	 * @param  {object} event jQuery event
 	 */
-	open_key : function(event) {
+	openKey : function(event) {
 		if (event.keyCode == this.letterKey && event.altKey) {
 			event.preventDefault();
 			event.stopPropagation();
@@ -338,7 +341,7 @@ var showMagic = {
 	 * Keys that close the main windows
 	 * @param  {object} event jQuery event
 	 */
-	close_key : function(event) {
+	closeKey : function(event) {
 		// enter & esc
 		if (( event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
 			event.preventDefault();
