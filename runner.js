@@ -9,13 +9,10 @@ $(function() {
 var showMagic = {
 
 	letterKey: 83, // S
-	element: {},   // element of the search field
-	inputField: {},
-	listUl: {}, // list of results
-	langUl: {}, // list of languages
 	lastVal: '', // last value from input
 	words: [],
 	sauce: 0,
+	template: chrome.extension.getURL('template.html'),
 	url: {
 		azet: 'http://slovnik.azet.sk/preklad/',
 		thesaurus: 'http://words.bighugelabs.com/api/2/4fa90f8d3320ec7bcdbff4f49cf85c5d/'
@@ -45,6 +42,12 @@ var showMagic = {
 
 	init : function() {
 		var that = this;
+		jQuery.get(this.template)
+			.success(function (data) {
+				console.log(data);
+			}).error(function (err) {
+				console.error('What? failied to fetch extenstion html');
+			});
 
 		// Create elements!
 		this.element = $('<div/>', { 'id': 'trans_magician', 'class': 'trans_disabled' });
@@ -73,8 +76,8 @@ var showMagic = {
 		// bind events on language bar
 		// dropdown
 		this.langUl.hover(
-		function() { that.langUl.removeClass('trans_magician_hidden'); },
-		function() { that.langUl.addClass('trans_magician_hidden'); }
+			function() { that.langUl.removeClass('trans_magician_hidden'); },
+			function() { that.langUl.addClass('trans_magician_hidden'); }
 		);
 
 		// click to switch lang
