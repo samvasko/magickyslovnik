@@ -42,55 +42,7 @@ var showMagic = {
 
 	init : function() {
 		var that = this;
-		jQuery.get(this.template)
-			.success(function (data) {
-				console.log(data);
-			}).error(function (err) {
-				console.error('What? failied to fetch extenstion html');
-			});
-
-		// Create elements!
-		this.element = $('<div/>', { 'id': 'trans_magician', 'class': 'trans_disabled' });
-		this.inputField = $('<input />', {
-			'name': 'searchmagic',
-			'type': 'text',
-			'id': 'searchmagic'}).appendTo(this.element);
-
-		this.listUl = $('<ul/>', {'id':'trans_magician_results'}).appendTo(this.element);
-		this.langUl = $('<ul/>', {'id':'trans_magician_lang', 'class': 'trans_magician_hidden' }).appendTo(this.element);
-
-		// selected language
-		this.langUl.append( $('<li/>', {
-			'text': this.slovak.from +' '+ this.languages.a.tname,
-			'id': 'trans_magician_lang_li',
-			'data-lang': 'a'
-		}) );
-		// dropdown items
-		for(var one in this.languages ) {
-			this.langUl.append( $('<li/>', { 'text': this.languages[one].tname, 'id': 'trans_magician_lang_li', 'data-lang': one }) );
-		}
-
-		this.langFirstLi  = this.langUl.find('li:first-child');
-		this.langDropownLi = this.langFirstLi.siblings();
-
-		// bind events on language bar
-		// dropdown
-		this.langUl.hover(
-			function() { that.langUl.removeClass('trans_magician_hidden'); },
-			function() { that.langUl.addClass('trans_magician_hidden'); }
-		);
-
-		// click to switch lang
-		this.langFirstLi.click(function() { that.switchLang(); });
-
-		// dropdown to change
-		this.langDropownLi.click(function() {
-			// ignore clicks on disabled element
-			if ( $(this).hasClass('trans_li_disabled') ) {
-				return false;
-			}
-			that.changeLang( $(this).attr('data-lang') );
-		});
+		jQuery.get(this.template, bindEvents);
 
 		// set default language and direction
 		this.from = true;
@@ -131,9 +83,58 @@ var showMagic = {
 	},
 
 	/**
+	 * Bind javascript events on template
+	 * @param  {string} data Unparsed template
+	 */
+	bindEvents: function(data) {
+		// Parse template
+		var template = $(data),
+			langUl = $('.languages', template),
+			langList = createList();
+
+		langUl.append(langList);
+
+		this.langUl.hover(
+			function() { that.langUl.removeClass('trans_magician_hidden'); },
+			function() { that.langUl.addClass('trans_magician_hidden'); }
+		);
+
+		var langFirstLi = langUl.children().first();
+		this.langFirstLi.click(that.switchLang.bind(that));
+
+		// dropdown to change
+		this.langDropownLi.click(function() {
+			// ignore clicks on disabled element
+			if ( $(this).hasClass('disabled') ) {
+				return false;
+			}
+			that.changeLang( $(this).attr('data-lang') );
+		});
+
+		// expose the object for injection
+		this.template = template;
+	},
+
+	/**
+	 * Create list of languages for the dropown picker
+	 * @return {mixed} ul of languages
+	 */
+	createList: function(){
+		var list = [];
+		for (var one in this.languages ) {
+			list.push($('<li/>', {
+				'text': this.languages[one].tname,
+				'data-lang': one
+			}));
+		}
+		console.log(list);
+		return list;
+	},
+
+	/**
 	 * Switch direciton of translation
 	 */
-	switchLang: function(){
+	switchLang: function() {
 		this.from = !this.from;
 		this.lang = this.shortLangString;
 	},
@@ -145,20 +146,20 @@ var showMagic = {
 	changeLang: function(slang){
 		var clicked = this.langDropownLi.filter('[data-lang="' + slang + '"]');
 		// disable the clicked
-		clicked.addClass('trans_li_disabled');
+		clicked.addClass('disabled');
 		// enable the disabled !
-		clicked.siblings().removeClass('trans_li_disabled');
+		clicked.siblings().removeClass('disabled');
 		// set clicked to be current language in head of dropdown and in search
 		this.lang = slang;
 		// close dropdown
-		this.langUl.addClass('trans_magician_hidden');
+		this.langUl.removeClass('visible');
 	},
 
 	/**
 	 * Open/close the main windows
 	 */
 	opencloser : function(open) {
-		this.element.toggleClass('trans_disabled');
+		this.element.toggleClass('disabled');
 		// focus only when opening
 		if (open) {
 			this.inputField.focus();
