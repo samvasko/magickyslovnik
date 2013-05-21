@@ -58,7 +58,7 @@ var showMagic = {
 
 		// selected language
 		this.langUl.append( $('<li/>', {
-			'text': this.slovak.from +' '+ this.languages['a'].tname,
+			'text': this.slovak.from +' '+ this.languages.a.tname,
 			'id': 'trans_magician_lang_li',
 			'data-lang': 'a'
 		}) );
