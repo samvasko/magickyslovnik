@@ -12,7 +12,10 @@ var showMagic = {
 	lastVal: '', // last value from input
 	words: [],
 	sauce: 0,
+
 	opened: false,
+	virgin: true,
+
 	template: chrome.extension.getURL('template.html'),
 	url: {
 		azet: 'http://slovnik.azet.sk/preklad/',
@@ -119,8 +122,12 @@ var showMagic = {
 		$(template.querySelectorAll('.magic_input')).on('keyup', that.keypress.bind(that));
 
 		// expose some elements for future use
+		that.langUl = langUl;
 		that.langFirstLi = langFirstLi;
 		that.langDropownLi = langDropownLi;
+
+		that.listUl = $(template.querySelector('.results'));
+		that.inputField = $(template.querySelector('.magic_input'));
 
 		// expose the object for injection
 		that.template = template;
@@ -169,11 +176,23 @@ var showMagic = {
 	 * Open the main window
 	 */
 	open: function() {
-		var host = $('<div/>', { id: 'magicky_slovnik' }),
-			element = host.appendTo(document.body);
+		if (this.virgin) {
+			var host = $('<div/>', { id: 'magicky_slovnik' }),
+				element = host.appendTo(document.body);
 
-		element = element[0].webkitCreateShadowRoot();
-		element.appendChild(this.template);
+			element = element[0].webkitCreateShadowRoot();
+			element.appendChild(this.template);
+
+			// expose it to object
+			this.host = host;
+			this.element = element;
+
+			this.virgin = false;
+		}
+
+		this.host.show();
+
+		this.inputField.focus();
 		this.opened = true;
 	},
 
@@ -182,7 +201,10 @@ var showMagic = {
 	 */
 	close: function() {
 
-		debugger;
+		this.host.hide();
+
+		this.inputField.val('');
+		this.listUl.html('');
 		this.opened = false;
 	},
 
