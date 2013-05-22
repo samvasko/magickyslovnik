@@ -12,6 +12,7 @@ var showMagic = {
 	lastVal: '', // last value from input
 	words: [],
 	sauce: 0,
+	opened: false,
 	template: chrome.extension.getURL('template.html'),
 	url: {
 		azet: 'http://slovnik.azet.sk/preklad/',
@@ -83,40 +84,46 @@ var showMagic = {
 	 */
 	bindEvents: function(data) {
 
+		var that = this;
+
 		// Parse template
-		var template = $(data),
-			langUl = $('.languages', template),
-			langList = this.createList();
+		// If there is a better method for doing this please let me know
+		var template = $(data)[0].content,
+			langUl = $(template.querySelectorAll('.languages')),
+			langList = that.createList();
 
 		langUl.append(langList);
 
+		// insert the styles
+		var stylesheet = chrome.extension.getURL('magician.css');
+		template.querySelector('style').innerText = '@import url('+stylesheet+')';
+
 		langUl.hover(
-			function() { this.langUl.addClass('visible'); },
-			function() { this.langUl.removeClass('visible'); }
+			function() { $(this).addClass('visible'); },
+			function() { $(this).removeClass('visible'); }
 		);
 
 		var langFirstLi = langUl.children().first(),
 			langDropownLi = langFirstLi.siblings();
 
-		langFirstLi.click(this.switchLang.bind(this));
+		langFirstLi.click(that.switchLang.bind(that));
 
 		// dropdown to change
 		langFirstLi.siblings().click(function() {
 			if ( $(this).hasClass('disabled') ) {
 				return false;
 			}
-			this.changeLang( $(this).attr('data-lang') );
+			that.changeLang( $(this).attr('data-lang') );
 		});
 
-		$('magic_input', template).on('keyup', this.keypress.bind(this));
-		/**
-		 * TEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEST
-		 *
-		 */
-		this.langFirstLi = langFirstLi;
+		$(template.querySelectorAll('.magic_input')).on('keyup', that.keypress.bind(that));
+
+		// expose some elements for future use
+		that.langFirstLi = langFirstLi;
+		that.langDropownLi = langDropownLi;
 
 		// expose the object for injection
-		this.template = template;
+		that.template = template;
 	},
 
 	/**
@@ -131,7 +138,6 @@ var showMagic = {
 				'data-lang': one
 			}));
 		}
-		console.log(list);
 		return list;
 	},
 
@@ -163,18 +169,27 @@ var showMagic = {
 	 * Open the main window
 	 */
 	open: function() {
+		var host = $('<div/>', { id: 'magicky_slovnik' }),
+			element = host.appendTo(document.body);
 
-
+		element = element[0].webkitCreateShadowRoot();
+		element.appendChild(this.template);
+		this.opened = true;
 	},
 
+	/**
+	 * Close main window
+	 */
 	close: function() {
 
+		debugger;
+		this.opened = false;
 	},
 
 
 	/**
 	 * Open or close tha main window
-	 * @param  {bool} open 	 are we opening?
+	 * @param  {bool} open are we opening?
 	 */
 	opencloser : function(open) {
 
@@ -346,7 +361,7 @@ var showMagic = {
 		if (event.keyCode == this.letterKey && event.altKey) {
 			event.preventDefault();
 			event.stopPropagation();
-			this.open();
+			this.opened ? this.close() : this.open();
 			return false;
 		}
 	},
