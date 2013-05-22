@@ -22,8 +22,11 @@
     {
       "matches": ["<all_urls>"],
       "js": ["jquery.js","runner.js"],
-      "css": ["magician.css"],
       "run_at": "document_end"
     }
+  ],
+  "web_accessible_resources": [
+    "template.html",
+    "magician.css"
   ]
 }
