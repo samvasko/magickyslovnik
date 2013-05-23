@@ -18,6 +18,7 @@
 }
 
 .magician input {
+	box-sizing: border-box;
 	position: relative;
 	display: block;
 	margin: 0;
@@ -39,6 +40,7 @@
 
 /*------- Language picker -------*/
 .magician .languages {
+	box-sizing: border-box;
 	position: absolute;
 	top: 1px;
 	right: 1px;
