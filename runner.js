@@ -190,7 +190,7 @@ var showMagic = {
 			this.virgin = false;
 		}
 
-		this.host.show();
+		this.host.removeClass('disabled');
 
 		this.inputField.focus();
 		this.opened = true;
@@ -201,7 +201,7 @@ var showMagic = {
 	 */
 	close: function() {
 
-		this.host.hide();
+		this.host.addClass('disabled');
 
 		this.inputField.val('');
 		this.listUl.html('');
