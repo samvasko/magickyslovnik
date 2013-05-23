@@ -181,7 +181,7 @@ var showMagic = {
 
 			// expose it to object
 			this.host = host;
-			this.element = element;
+			this.element = $(element.querySelector('.magician'));
 
 			//set some defaults
 			this.from = true;
@@ -190,8 +190,7 @@ var showMagic = {
 			this.virgin = false;
 		}
 
-		this.host.removeClass('disabled');
-
+		this.element.removeClass('disabled');
 		this.inputField.focus();
 		this.opened = true;
 	},
@@ -200,28 +199,10 @@ var showMagic = {
 	 * Close main window
 	 */
 	close: function() {
-
-		this.host.addClass('disabled');
-
+		this.element.addClass('disabled');
 		this.inputField.val('');
 		this.listUl.html('');
 		this.opened = false;
-	},
-
-
-	/**
-	 * Open or close tha main window
-	 * @param  {bool} open are we opening?
-	 */
-	opencloser : function(open) {
-
-		if (open) {
-			this.inputField.focus();
-		} else {
-			// clear on the end
-			this.inputField.val('');
-			this.listUl.html('');
-		}
 	},
 
 	/**
@@ -403,7 +384,7 @@ var showMagic = {
 	 */
 	closeKey : function(event) {
 		// enter & esc
-		if (( event.keyCode == 27 ) && !this.element.hasClass('trans_disabled')) {
+		if (event.keyCode == 27) {
 			event.preventDefault();
 			event.stopPropagation();
 			this.close();
