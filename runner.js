@@ -361,18 +361,27 @@ var showMagic = {
 	 */
 	render : function(words) {
 		if (!words) console.error('missing words');
-		this.listUl.html('');
+		var wordlist = [];
 
 		for(var word in words ) {
 			var current = words[word];
-			$('<li/>').text( current.to.join(' | ') )
-						.prepend($('<b/>').text(current.from))
-						.appendTo(this.listUl);
+			wordlist.push(this.lister(current));
 			if (word > 10) {
 				break;
 			}
 		}
-		this.listUl.appendTo(this.element);
+		this.listUl.html(wordlist);
+	},
+
+	/**
+	 * Create list item for one word
+	 * @param  {mixed} current current word
+	 * @return {mixed}         html li element
+	 */
+	lister: function(current){
+		return $('<li/>').text(current.to.join(' | '))
+						.prepend($('<b/>')
+						.text(current.from));
 	},
 
 	/**

@@ -117,31 +117,28 @@
 
 
 /*------- Dropdown with results -------*/
-#trans_magician_results {
+.results {
 	position: absolute;
 	z-index: 996 !important;
-	margin-top: 0;
-	margin-left: 5%;
+	margin: 0 0 0 5%;
 	padding: 0;
 	width: 90%;
-	background-color: white;
+	background-color: #fafafa;
 	box-shadow: 1px 1px 3px #777;
-	/* box-shadow: 0 10px 20px #ccc; */
 	list-style: none;
 	font-size: 14px;
 }
 
-#trans_magician_results li {
+.results li {
 	margin: 0 20px;
-	padding:2px 0 !important;
+	padding:2px 0;
 }
 
-#trans_magician_results li:first-child { margin-top: 20px;}
-#trans_magician_results li:last-child { margin-bottom: 20px;}
+.results li:first-child { margin-top: 20px;}
+.results li:last-child { margin-bottom: 20px;}
 
-#trans_magician_results b {
-	display: inline-block !important;
-	margin: 0;
+.results b {
+	display: inline-block;
 	padding: 0 10px 0 0;
 	font-weight: bold;
 }
