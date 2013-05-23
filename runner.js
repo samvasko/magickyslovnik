@@ -47,10 +47,6 @@ var showMagic = {
 		var that = this;
 		jQuery.get(this.template, this.bindEvents.bind(this));
 
-		// TODO: move this to the opening method
-		// this.from = true;
-		// this.changeLang('a');
-
 		// pick sauce
 		this.sauce = this.azet.bind(this);
 
@@ -102,8 +98,8 @@ var showMagic = {
 		template.querySelector('style').innerText = '@import url('+stylesheet+')';
 
 		langUl.hover(
-			function() { $(this).addClass('visible'); },
-			function() { $(this).removeClass('visible'); }
+			function() { $(this).removeClass('hidden'); },
+			function() { $(this).addClass('hidden'); }
 		);
 
 		var langFirstLi = langUl.children().first(),
@@ -169,7 +165,7 @@ var showMagic = {
 		// set selected to be current language in head of dropdown and in search
 		this.lang = slang;
 		// close dropdown
-		this.langUl.removeClass('visible');
+		this.langUl.addClass('hidden');
 	},
 
 	/**
@@ -186,6 +182,10 @@ var showMagic = {
 			// expose it to object
 			this.host = host;
 			this.element = element;
+
+			//set some defaults
+			this.from = true;
+			this.changeLang('a');
 
 			this.virgin = false;
 		}
@@ -293,9 +293,9 @@ var showMagic = {
 	 * Stuff what happens after keystroke language change
 	 */
 	changeAlert: function(){
-		this.langFirstLi.addClass('trans_magician_alert');
+		this.langFirstLi.addClass('alert');
 		setTimeout( function(){
-			this.langFirstLi.removeClass('trans_magician_alert');
+			this.langFirstLi.removeClass('alert');
 		}.bind(this) , 400);
 	},
 

@@ -1,41 +1,23 @@
-/*------- Resets -------*/
-#trans_magician,
-#trans_magician input,
-#trans_magician_lang,
-#trans_magician_lang_li,
-#trans_magician_results,
-#trans_magician_results li,
-#trans_magician_results b
-{
-	z-index: 999;
-	display: inherit;
-	box-sizing: border-box;
-	text-align: left;
-	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
-}
-
-/*------- Main styles -------*/
-#trans_magician {
+.magician {
 	position: fixed;
 	top: 13%;
 	left: 28%;
+	z-index: 999;
+	box-sizing: border-box;
 	margin: 0 auto;
-	padding: 0;
 	width: 42%;
 	height: 60px;
 	box-shadow: 0 0 0 2000px rgba(34, 34, 34, 0.19);
-	background-color: transparent;
-	/* box-shadow: 0 30px 150px 29px #ccc; */
 	color: #111;
+	font-family: Candara, Calibri, Segoe, "Segoe UI", Optima, Arial, sans-serif;
 }
 
-#trans_magician.trans_disabled {
-	display: none !important;
-	overflow: hidden !important;
+.magician.disabled {
+	display: none;
+	overflow: hidden;
 }
 
-#trans_magician input,
-#trans_magician input:focus {
+.magician input {
 	position: relative;
 	display: block;
 	margin: 0;
@@ -43,11 +25,12 @@
 	width: 100%;
 	height: 60px;
 	outline: 0;
-	border: 1px solid silver;
 	border: 1px solid cornflowerBlue;
-	background: -webkit-linear-gradient(-45deg, #ededed 0%,#eaeaea 100%);
 	background-color: #fff;
-	box-shadow: 0px 0px 1px 2px #A1D3DA, inset -100px 0 8px -4px #777, inset 0 0 1px 3px #FAFAFA;
+	background: -webkit-linear-gradient(-45deg, #ededed 0%,#eaeaea 100%);
+	box-shadow: 0px 0px 1px 2px #A1D3DA,
+				inset -100px 0 8px -4px #777,
+				inset 0 0 1px 3px #FAFAFA;
 	color: #333;
 	text-shadow: 1px 1px 1px #FAFAFA;
 	font-weight: 200;
@@ -55,7 +38,7 @@
 }
 
 /*------- Language picker -------*/
-#trans_magician_lang {
+.magician .languages {
 	position: absolute;
 	top: 1px;
 	right: 1px;
@@ -66,64 +49,72 @@
 	width: 98px;
 	height: 210px;
 	background-color: #fafafa;
-	color:#222;
 	color: #555;
 	text-transform: capitalize;
 	line-height: 20px;
-	-webkit-transition: 0.8s all;
-	transition: 0.8s all;
 }
 
-.trans_magician_hidden {
-	overflow: hidden !important;
-	height: 58px !important;
-}
-
-#trans_magician_lang_li {
-	background-image: none;
-	list-style: none;
-	position: relative;
-	margin: 0;
-	padding: 0;
-	background-color: #fafafa;
-	text-align: center;
-	font-size: 14px;
-	line-height: 25px;
-	cursor: pointer;
-}
-#trans_magician_lang_li:first-child {
-	margin: 0;
-	padding: 11px 0 0 0 ;
-	width: 98px;
+.magician .languages.hidden {
+	overflow: hidden;
 	height: 58px;
-	color:#333;
-	line-height: 20px;
-	-webkit-transition: 0.8s all;
-	transition: 0.8s all;
-}
-#trans_magician_lang_li:nth-child(2) {
-	box-shadow: inset 0 2px 1px -1px #eee;
-}
-#trans_magician_lang_li:nth-child(n+2):not(.trans_li_disabled):hover {
-	background-color: #fff;
-	text-decoration: underline;
-}
-#trans_magician_lang_li:nth-child(n+2):not(.trans_li_disabled):hover:after {
-	position: absolute;
-	right: -1px;
-	margin: 0;
-	padding: 0;
-	color: #aaa;
-	content: "◀";
-}
-.trans_li_disabled {
-	color: #ccc;
 }
 
-#trans_magician_lang:hover:not(.trans_magician_hidden) #trans_magician_lang_li:first-child, .trans_magician_alert {
-	background: #555556 !important;
-	color:#eee !important;
+
+/*------- Individual results -------*/
+
+.magician .languages li {
+    list-style: none;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background-color: #fafafa;
+    text-align: center;
+    font-size: 14px;
+    line-height: 25px;
+    cursor: pointer;
 }
+
+/* First entry is currently chosen lang */
+.magician .languages li:first-child {
+    padding-top: 11px;
+    width: 98px;
+    height: 47px;
+    color:#333;
+    line-height: 20px;
+    -webkit-transition-property: color, background;
+    transition-property: color, background;
+
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+/* Subtle divider */
+.magician .languages li:nth-child(2) {
+    box-shadow: inset 0 2px 1px -1px #eee;
+}
+/* Currenty selected item is geyed out from the list */
+.magician .languages li.disabled {
+    color: #ccc;
+}
+.magician .languages li:nth-child(n+2):not(.disabled):hover {
+    background-color: #fff;
+    text-decoration: underline;
+}
+.magician .languages li:nth-child(n+2):not(.disabled):hover:after {
+    position: absolute;
+    right: -1px;
+    margin: 0;
+    padding: 0;
+    color: #aaa;
+    content: "◀";
+}
+
+/* Notify user about the change */
+.magician .alert {
+	background: #555556 !important;
+    color:#eee !important;
+}
+
 
 /*------- Dropdown with results -------*/
 #trans_magician_results {
