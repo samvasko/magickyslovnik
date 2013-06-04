@@ -173,7 +173,11 @@ var showMagic = {
 	 */
 	open: function() {
 		if (this.virgin) {
-			var host = $('<div/>', { id: 'magicky_slovnik' }),
+			var host = $('<div/>', {
+					id: 'magicky_slovnik' ,
+					contentEditable: 'true',
+					style: 'height: 0; width: 0; margin: 0, padding: 0'
+				}),
 				element = host.appendTo(document.body);
 
 			element = element[0].webkitCreateShadowRoot();
