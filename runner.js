@@ -127,6 +127,28 @@ var showMagic = {
 
 		// expose the object for injection
 		that.template = template;
+
+		// inject the object now, sorry
+		// if injected later, whole page gets scrolled
+
+		var host = $('<div/>', {
+				id: 'magicky_slovnik' ,
+				contentEditable: 'true',
+				style: 'height: 0; width: 0; margin: 0, padding: 0'
+			}),
+			element = host.appendTo(document.body);
+
+		element = element[0].webkitCreateShadowRoot();
+		element.appendChild(this.template);
+
+		// expose it to object
+		this.host = host;
+		this.element = $(element.querySelector('.magician'));
+
+		//set some defaults
+		this.from = true;
+		this.changeLang('a');
+
 	},
 
 	/**
@@ -172,27 +194,6 @@ var showMagic = {
 	 * Open the main window
 	 */
 	open: function() {
-		if (this.virgin) {
-			var host = $('<div/>', {
-					id: 'magicky_slovnik' ,
-					contentEditable: 'true',
-					style: 'height: 0; width: 0; margin: 0, padding: 0'
-				}),
-				element = host.appendTo(document.body);
-
-			element = element[0].webkitCreateShadowRoot();
-			element.appendChild(this.template);
-
-			// expose it to object
-			this.host = host;
-			this.element = $(element.querySelector('.magician'));
-
-			//set some defaults
-			this.from = true;
-			this.changeLang('a');
-
-			this.virgin = false;
-		}
 
 		this.element.removeClass('disabled');
 		this.inputField.focus();
